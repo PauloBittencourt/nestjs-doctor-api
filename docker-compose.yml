@@ -1,0 +1,29 @@
+version: '3'
+
+services: 
+  app: 
+    build: .
+    command: npm run start:dev
+    ports: 
+      - '3000:3000'
+    volumes: 
+      - .:/usr/app
+    environment:
+    - DB_HOST=db
+    - DB_PORT=3306
+    - DB_USERNAME=root
+    - DB_PASSWORD=123
+    - DB_DATABASE=doctor
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_USERNAME: root
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_ROOT_DATABASE: doctor
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 8080:8080

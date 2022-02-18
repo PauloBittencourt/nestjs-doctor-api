@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { DoctorService } from './doctor.service';
 import { CreateDoctorDto } from './entity/dto/create-doctor.dto';
+import { UpdateDoctorDto } from './entity/dto/update-doctor.dto';
 
 @Controller('api/v1/doctors')
 export class DoctorController {
@@ -23,7 +24,7 @@ export class DoctorController {
     }
 
     @Put(':id')
-    async update(@Param('id', new ParseUUIDPipe()) id: string, @Body() body) {
+    async update(@Param('id', new ParseUUIDPipe()) id: string, @Body() body:UpdateDoctorDto) {
         return await this.doctorService.update(id,body);
     }
 
