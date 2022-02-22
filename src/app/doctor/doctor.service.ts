@@ -1,4 +1,3 @@
-import { HttpService } from '@nestjs/axios';
 import { Injectable, NotFoundException  } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,12 +5,11 @@ import { DoctorEntity } from './entity/doctor.entity';
 import { CreateDoctorDto } from './entity/dto/create-doctor.dto';
 import { UpdateDoctorDto } from './entity/dto/update-doctor.dto';
 
-
 @Injectable()
 export class DoctorService{
     constructor(
         @InjectRepository(DoctorEntity)
-        private readonly  doctorRepository: Repository<DoctorEntity> 
+        private readonly  doctorRepository: Repository<DoctorEntity>
     ) {}
 
     async findAll() {
@@ -40,20 +38,5 @@ export class DoctorService{
     async deleteById(id: string) {
         await this.doctorRepository.findOneOrFail(id);
         await this.doctorRepository.softDelete(id);
-    }
-}
-
-@Injectable()
-export class DoctorCep {
-    constructor(private readonly httpService: HttpService) {}
-
-    async getCepDoctors(){
-        let doctors = [];
-        const url = 'https://viacep.com.br/ws/21040330/json'
-        const {status, data} = await this.httpService.get(url).toPromise();
-
-        if (status === 200){
-            doctors = data;
-        }
     }
 }

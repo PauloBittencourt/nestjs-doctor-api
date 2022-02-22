@@ -1,8 +1,9 @@
-version: '3'
+version: "3.7"
 
-services: 
+services:
   app: 
     build: .
+    container_name: doctor-api
     command: npm run start:dev
     ports: 
       - '3000:3000'
@@ -10,20 +11,27 @@ services:
       - .:/usr/app
     environment:
     - DB_HOST=db
-    - DB_PORT=3306
-    - DB_USERNAME=root
-    - DB_PASSWORD=123
-    - DB_DATABASE=doctor
+    - DB_PORT=5432
+    - DB_USERNAME=postgres
+    - DB_PASSWORD=postgres123
+    - DB_DATABASE=doctor_db
   db:
-    image: mariadb
-    restart: always
+    image: postgres
+    container_name: postgresdb
     environment:
-      MYSQL_ROOT_USERNAME: root
-      MYSQL_ROOT_PASSWORD: 123
-      MYSQL_ROOT_DATABASE: doctor
-  adminer:
-    image: adminer
-    container_name: adminer
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres123
+        POSTGRES_DB: doctor_db
+    ports:
+        - 5432:5432
+  db-admin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_4
     restart: always
     ports:
-      - 8080:8080
+        - 9090:80
+    depends_on:
+        - db
+    environment:
+        PGADMIN_DEFAULT_EMAIL: admin@admin.com
+        PGADMIN_DEFAULT_PASSWORD: postgres123
